@@ -83,7 +83,7 @@ def init_repo(repo, workdir):
     except (ValueError, git.exc.GitCommandError) as e:
         pass # can be ignored
     # Add the remote
-    gitdir.git.remote("add", "--mirror", REMOTE_NAME, repo.ssh_url)
+    gitdir.git.remote("add", "--mirror", REMOTE_NAME, repo.clone_url)
 
 def init_repos(repos, workdir):
     failed = []
