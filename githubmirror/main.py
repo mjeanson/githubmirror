@@ -5,9 +5,13 @@ import sys
 import git
 import json
 import github
+import builtins
 
 REMOTE_NAME = 'origin'
 
+
+# Python 2/3 compat
+if sys.version[0]=="3": raw_input=input
 
 def setup_config_file(workdir):
     config = dict()
@@ -24,7 +28,7 @@ def get_config_file(workdir):
     if not os.path.isfile(get_workdir_path('.githubmirror', workdir)):
         setup_config_file(workdir)
 
-    with file(get_workdir_path('.githubmirror', workdir)) as f:
+    with open(get_workdir_path('.githubmirror', workdir)) as f:
         try:
             config = json.load(f)
         except ValueError:
@@ -66,7 +70,7 @@ def get_repo_path(repo_name, workdir):
     return get_workdir_path("%s.git" % repo_name, workdir)
 
 def print_failed(failed):
-    print "Failures encountered while processing:"
+    print("Failures encountered while processing:")
     for repo in failed:
         print ("    %s" % repo.name)
 
@@ -91,7 +95,7 @@ def init_repos(repos, workdir):
         try:
             init_repo(repo, workdir)
         except git.exc.GitCommandError as e:
-            print str(e)
+            print(str(e))
             failed.append(repo)
     if failed:
         print_failed(failed)
@@ -114,7 +118,7 @@ def fetch(repos, workdir):
         try:
             fetch_repo(repo, workdir)
         except git.exc.GitCommandError as e:
-            print str(e)
+            print(str(e))
             failed.append(repo)
     if failed:
         print_failed(failed)
